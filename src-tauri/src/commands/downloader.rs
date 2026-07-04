@@ -117,7 +117,12 @@ pub async fn start_download(
     #[cfg(windows)]
     cmd.creation_flags(0x08000000); // CREATE_NO_WINDOW
 
+    let js_runtime_arg = format!("deno:{}", ffmpeg_dir.to_string_lossy());
+
     cmd.arg("--newline")
+       .arg("--ignore-errors")
+       .arg("--js-runtimes")
+       .arg(&js_runtime_arg)
        .arg("--progress-template")
        .arg("%(progress)j")
        .arg("--extract-audio")
