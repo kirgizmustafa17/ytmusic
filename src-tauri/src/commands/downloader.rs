@@ -3,6 +3,9 @@ use std::process::Stdio;
 use tokio::process::Command;
 use tokio::io::{AsyncBufReadExt, BufReader};
 use std::path::PathBuf;
+
+#[cfg(windows)]
+use std::os::windows::process::CommandExt;
 use crate::commands::binary_manager::get_binary_dir;
 
 #[derive(serde::Serialize)]
@@ -44,7 +47,12 @@ pub async fn check_url(app: AppHandle, url: String) -> Result<CheckResult, Strin
         return Err("yt-dlp binary not found".to_string());
     }
 
-    let output = Command::new(&ytdlp_path)
+    let mut cmd = Command::new(&ytdlp_path);
+    
+    #[cfg(windows)]
+    cmd.creation_flags(0x08000000); // CREATE_NO_WINDOW
+
+    let output = cmd
         .arg("--flat-playlist")
         .arg("--dump-single-json")
         .arg(&url)
@@ -93,6 +101,10 @@ pub async fn start_download(app: AppHandle, url: String, download_id: String) ->
     let output_template = music_dir.join("%(title)s.%(ext)s").to_string_lossy().to_string();
 
     let mut cmd = Command::new(&ytdlp_path);
+    
+    #[cfg(windows)]
+    cmd.creation_flags(0x08000000); // CREATE_NO_WINDOW
+
     cmd.arg("--newline")
        .arg("--progress-template")
        .arg("%(progress)j")
