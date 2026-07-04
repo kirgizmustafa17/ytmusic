@@ -129,7 +129,6 @@ pub async fn start_download(
        .arg("mp3")
        .arg("--audio-quality")
        .arg("320K")
-       .arg("--embed-thumbnail")
        .arg("--ffmpeg-location")
        .arg(&ffmpeg_dir)
        .arg("-o")
