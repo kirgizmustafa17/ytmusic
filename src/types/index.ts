@@ -7,6 +7,8 @@ export interface DownloadItem {
   speed: string;
   eta: string;
   error?: string;
+  playlist_index?: number;
+  playlist_count?: number;
 }
 
 export interface BinaryStatus {
@@ -38,4 +40,6 @@ export interface DownloadProgress {
   percentage: number;
   speed: string;
   eta: string;
+  playlist_index?: number;
+  playlist_count?: number;
 }

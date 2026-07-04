@@ -34,6 +34,8 @@ function App() {
                   percentage: payload.percentage,
                   speed: payload.speed,
                   eta: payload.eta,
+                  playlist_index: payload.playlist_index,
+                  playlist_count: payload.playlist_count,
                 }
               : item
           )
@@ -60,7 +62,7 @@ function App() {
     }
   };
 
-  const startSingleDownload = (url: string, title: string) => {
+  const startSingleDownload = (url: string, title: string, playlistFolder?: string) => {
     const id = Date.now().toString() + Math.random().toString(36).substring(2, 7);
     setDownloads((prev) => [
       {
@@ -75,7 +77,7 @@ function App() {
       ...prev,
     ]);
 
-    invoke("start_download", { url, downloadId: id }).catch((e) => {
+    invoke("start_download", { url, downloadId: id, playlistFolder }).catch((e) => {
       setDownloads((prev) =>
         prev.map((item) =>
           item.id === id ? { ...item, status: "error", error: String(e) } : item
@@ -86,7 +88,8 @@ function App() {
 
   const handleDownloadAll = () => {
     if (!playlistCheck || !currentUrl) return;
-    startSingleDownload(currentUrl, playlistCheck.title || currentUrl);
+    const folder = playlistCheck.title || "Playlist";
+    startSingleDownload(currentUrl, playlistCheck.title || currentUrl, folder);
     setPlaylistCheck(null);
     setCurrentUrl(null);
   };

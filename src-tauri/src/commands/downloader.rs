@@ -28,6 +28,8 @@ pub struct DownloadProgress {
     pub percentage: f64,
     pub speed: String,
     pub eta: String,
+    pub playlist_index: Option<u32>,
+    pub playlist_count: Option<u32>,
 }
 
 fn get_ytdlp_path(app: &AppHandle) -> PathBuf {
@@ -92,13 +94,23 @@ pub async fn check_url(app: AppHandle, url: String) -> Result<CheckResult, Strin
 }
 
 #[tauri::command]
-pub async fn start_download(app: AppHandle, url: String, download_id: String) -> Result<(), String> {
+pub async fn start_download(
+    app: AppHandle, 
+    url: String, 
+    download_id: String,
+    playlist_folder: Option<String>,
+) -> Result<(), String> {
     let ytdlp_path = get_ytdlp_path(&app);
     let ffmpeg_dir = get_ffmpeg_dir(&app);
     
     // We will save to ~/Music
     let music_dir = dirs::audio_dir().unwrap_or_else(|| dirs::home_dir().unwrap_or_else(|| PathBuf::from(".")));
-    let output_template = music_dir.join("%(title)s.%(ext)s").to_string_lossy().to_string();
+    let mut out_dir = music_dir;
+    if let Some(folder) = playlist_folder {
+        let sanitized = folder.replace(|c: char| !c.is_alphanumeric() && c != ' ' && c != '-', "_");
+        out_dir = out_dir.join(sanitized);
+    }
+    let output_template = out_dir.join("%(title)s.%(ext)s").to_string_lossy().to_string();
 
     let mut cmd = Command::new(&ytdlp_path);
     
@@ -131,8 +143,18 @@ pub async fn start_download(app: AppHandle, url: String, download_id: String) ->
     let app_clone = app.clone();
 
     tokio::spawn(async move {
+        let mut current_item: Option<u32> = None;
+        let mut total_items: Option<u32> = None;
+
         while let Ok(Some(line)) = reader.next_line().await {
-            if let Ok(progress) = serde_json::from_str::<serde_json::Value>(&line) {
+            if line.starts_with("[download] Downloading item ") || line.starts_with("[download] Downloading video ") {
+                let parts: Vec<&str> = line.split_whitespace().collect();
+                // [download] Downloading video 1 of 3
+                if parts.len() >= 6 {
+                    current_item = parts[3].parse().ok().or(current_item);
+                    total_items = parts[5].parse().ok().or(total_items);
+                }
+            } else if let Ok(progress) = serde_json::from_str::<serde_json::Value>(&line) {
                 if let Some(percent_str) = progress.get("_percent_str").and_then(|v| v.as_str()) {
                     let cleaned = percent_str.replace("%", "").trim().to_string();
                     let percentage: f64 = cleaned.parse().unwrap_or(0.0);
@@ -146,6 +168,8 @@ pub async fn start_download(app: AppHandle, url: String, download_id: String) ->
                         percentage,
                         speed,
                         eta,
+                        playlist_index: current_item,
+                        playlist_count: total_items,
                     }).unwrap_or(());
                 }
             } else if line.contains("[ExtractAudio]") || line.contains("[Merger]") {
@@ -155,6 +179,8 @@ pub async fn start_download(app: AppHandle, url: String, download_id: String) ->
                     percentage: 100.0,
                     speed: "".to_string(),
                     eta: "".to_string(),
+                    playlist_index: current_item,
+                    playlist_count: total_items,
                 }).unwrap_or(());
             }
         }
@@ -168,6 +194,8 @@ pub async fn start_download(app: AppHandle, url: String, download_id: String) ->
                     percentage: 100.0,
                     speed: "".to_string(),
                     eta: "".to_string(),
+                    playlist_index: current_item,
+                    playlist_count: total_items,
                 }).unwrap_or(());
             } else {
                 app_clone.emit("download-progress", DownloadProgress {
@@ -176,6 +204,8 @@ pub async fn start_download(app: AppHandle, url: String, download_id: String) ->
                     percentage: 0.0,
                     speed: "".to_string(),
                     eta: "".to_string(),
+                    playlist_index: current_item,
+                    playlist_count: total_items,
                 }).unwrap_or(());
             }
         }

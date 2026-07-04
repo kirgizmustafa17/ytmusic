@@ -12,6 +12,11 @@ export function DownloadItemComponent({ item }: { item: DownloadItem }) {
           {item.title || item.url}
         </strong>
         <div className="flex items-center gap-2">
+          {item.playlist_count && item.playlist_count > 1 && item.playlist_index && (
+            <span className="text-sm text-secondary mr-2 font-mono">
+              {item.playlist_index}/{item.playlist_count}
+            </span>
+          )}
           {item.status === 'downloading' || item.status === 'converting' ? <FaSpinner className="fa-spin" /> : null}
           {isComplete && <FaCheck style={{ color: 'var(--success-color)' }} />}
           {isError && <FaExclamationTriangle style={{ color: 'var(--error-color)' }} />}
