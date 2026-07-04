@@ -4,6 +4,7 @@ import { listen, UnlistenFn } from "@tauri-apps/api/event";
 import { UrlInput } from "./components/UrlInput";
 import { DownloadQueue } from "./components/DownloadQueue";
 import { BinaryManager } from "./components/BinaryManager";
+import TitleBar from "./components/TitleBar";
 import { PlaylistDialog } from "./components/PlaylistDialog";
 import { DownloadItem, CheckResult, DownloadProgress } from "./types";
 import { FaMusic } from "react-icons/fa";
@@ -111,7 +112,9 @@ function App() {
   }
 
   return (
-    <div className="app-container">
+    <>
+      <TitleBar />
+      <div className="app-container">
       <header className="header">
         <h1 className="flex items-center justify-center gap-4">
           <FaMusic /> YTMusic
@@ -133,7 +136,8 @@ function App() {
           }}
         />
       )}
-    </div>
+      </div>
+    </>
   );
 }
 

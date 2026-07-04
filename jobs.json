@@ -1,0 +1,329 @@
+{
+  "total_count": 3,
+  "jobs": [
+    {
+      "id": 85170578673,
+      "run_id": 28721043003,
+      "workflow_name": "Release",
+      "head_branch": "v1.0.4",
+      "run_url": "https://api.github.com/repos/kirgizmustafa17/ytmusic/actions/runs/28721043003",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTNxZrs8AAAAT1I_k8Q",
+      "head_sha": "c609ec018b50db4c27237f26e4e205bad13adf89",
+      "url": "https://api.github.com/repos/kirgizmustafa17/ytmusic/actions/jobs/85170578673",
+      "html_url": "https://github.com/kirgizmustafa17/ytmusic/actions/runs/28721043003/job/85170578673",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-07-04T22:02:47Z",
+      "started_at": "2026-07-04T22:02:51Z",
+      "completed_at": "2026-07-04T22:07:20Z",
+      "name": "build-tauri (macos-latest)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-07-04T22:02:52Z",
+          "completed_at": "2026-07-04T22:02:54Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-07-04T22:02:54Z",
+          "completed_at": "2026-07-04T22:02:55Z"
+        },
+        {
+          "name": "setup node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-07-04T22:02:55Z",
+          "completed_at": "2026-07-04T22:02:57Z"
+        },
+        {
+          "name": "install Rust stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-07-04T22:02:57Z",
+          "completed_at": "2026-07-04T22:03:07Z"
+        },
+        {
+          "name": "install dependencies (ubuntu only)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 5,
+          "started_at": "2026-07-04T22:03:07Z",
+          "completed_at": "2026-07-04T22:03:07Z"
+        },
+        {
+          "name": "install frontend dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-07-04T22:03:07Z",
+          "completed_at": "2026-07-04T22:03:09Z"
+        },
+        {
+          "name": "Run tauri-apps/tauri-action@v0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-07-04T22:03:09Z",
+          "completed_at": "2026-07-04T22:07:16Z"
+        },
+        {
+          "name": "Post setup node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-07-04T22:07:16Z",
+          "completed_at": "2026-07-04T22:07:17Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-07-04T22:07:17Z",
+          "completed_at": "2026-07-04T22:07:17Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-07-04T22:07:17Z",
+          "completed_at": "2026-07-04T22:07:17Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/kirgizmustafa17/ytmusic/check-runs/85170578673",
+      "labels": [
+        "macos-latest"
+      ],
+      "runner_id": 1000000019,
+      "runner_name": "GitHub Actions 1000000019",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 85170578676,
+      "run_id": 28721043003,
+      "workflow_name": "Release",
+      "head_branch": "v1.0.4",
+      "run_url": "https://api.github.com/repos/kirgizmustafa17/ytmusic/actions/runs/28721043003",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTNxZrs8AAAAT1I_k9A",
+      "head_sha": "c609ec018b50db4c27237f26e4e205bad13adf89",
+      "url": "https://api.github.com/repos/kirgizmustafa17/ytmusic/actions/jobs/85170578676",
+      "html_url": "https://github.com/kirgizmustafa17/ytmusic/actions/runs/28721043003/job/85170578676",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-07-04T22:02:47Z",
+      "started_at": "2026-07-04T22:02:51Z",
+      "completed_at": "2026-07-04T22:10:27Z",
+      "name": "build-tauri (ubuntu-22.04)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-07-04T22:02:52Z",
+          "completed_at": "2026-07-04T22:02:53Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-07-04T22:02:53Z",
+          "completed_at": "2026-07-04T22:02:54Z"
+        },
+        {
+          "name": "setup node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-07-04T22:02:54Z",
+          "completed_at": "2026-07-04T22:02:58Z"
+        },
+        {
+          "name": "install Rust stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-07-04T22:02:58Z",
+          "completed_at": "2026-07-04T22:03:07Z"
+        },
+        {
+          "name": "install dependencies (ubuntu only)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-07-04T22:03:07Z",
+          "completed_at": "2026-07-04T22:03:43Z"
+        },
+        {
+          "name": "install frontend dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-07-04T22:03:43Z",
+          "completed_at": "2026-07-04T22:03:47Z"
+        },
+        {
+          "name": "Run tauri-apps/tauri-action@v0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-07-04T22:03:47Z",
+          "completed_at": "2026-07-04T22:10:24Z"
+        },
+        {
+          "name": "Post setup node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-07-04T22:10:24Z",
+          "completed_at": "2026-07-04T22:10:24Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-07-04T22:10:24Z",
+          "completed_at": "2026-07-04T22:10:24Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-07-04T22:10:24Z",
+          "completed_at": "2026-07-04T22:10:24Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/kirgizmustafa17/ytmusic/check-runs/85170578676",
+      "labels": [
+        "ubuntu-22.04"
+      ],
+      "runner_id": 1000000017,
+      "runner_name": "GitHub Actions 1000000017",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 85170578677,
+      "run_id": 28721043003,
+      "workflow_name": "Release",
+      "head_branch": "v1.0.4",
+      "run_url": "https://api.github.com/repos/kirgizmustafa17/ytmusic/actions/runs/28721043003",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTNxZrs8AAAAT1I_k9Q",
+      "head_sha": "c609ec018b50db4c27237f26e4e205bad13adf89",
+      "url": "https://api.github.com/repos/kirgizmustafa17/ytmusic/actions/jobs/85170578677",
+      "html_url": "https://github.com/kirgizmustafa17/ytmusic/actions/runs/28721043003/job/85170578677",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-07-04T22:02:47Z",
+      "started_at": "2026-07-04T22:02:51Z",
+      "completed_at": "2026-07-04T22:12:13Z",
+      "name": "build-tauri (windows-latest)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-07-04T22:02:52Z",
+          "completed_at": "2026-07-04T22:02:53Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-07-04T22:02:53Z",
+          "completed_at": "2026-07-04T22:02:57Z"
+        },
+        {
+          "name": "setup node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-07-04T22:02:57Z",
+          "completed_at": "2026-07-04T22:03:04Z"
+        },
+        {
+          "name": "install Rust stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-07-04T22:03:04Z",
+          "completed_at": "2026-07-04T22:03:24Z"
+        },
+        {
+          "name": "install dependencies (ubuntu only)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 5,
+          "started_at": "2026-07-04T22:03:24Z",
+          "completed_at": "2026-07-04T22:03:24Z"
+        },
+        {
+          "name": "install frontend dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-07-04T22:03:24Z",
+          "completed_at": "2026-07-04T22:03:37Z"
+        },
+        {
+          "name": "Run tauri-apps/tauri-action@v0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-07-04T22:03:37Z",
+          "completed_at": "2026-07-04T22:12:09Z"
+        },
+        {
+          "name": "Post setup node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-07-04T22:12:09Z",
+          "completed_at": "2026-07-04T22:12:09Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-07-04T22:12:09Z",
+          "completed_at": "2026-07-04T22:12:11Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-07-04T22:12:11Z",
+          "completed_at": "2026-07-04T22:12:11Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/kirgizmustafa17/ytmusic/check-runs/85170578677",
+      "labels": [
+        "windows-latest"
+      ],
+      "runner_id": 1000000018,
+      "runner_name": "GitHub Actions 1000000018",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}
