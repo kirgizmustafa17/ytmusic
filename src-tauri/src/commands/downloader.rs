@@ -1,11 +1,10 @@
-use tauri::{AppHandle, Manager, Emitter};
+use tauri::{AppHandle, Emitter};
 use std::process::Stdio;
 use tokio::process::Command;
 use tokio::io::{AsyncBufReadExt, BufReader};
 use std::path::PathBuf;
 
-#[cfg(windows)]
-use std::os::windows::process::CommandExt;
+
 use crate::commands::binary_manager::get_binary_dir;
 
 #[derive(serde::Serialize)]
