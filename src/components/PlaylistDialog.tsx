@@ -11,11 +11,11 @@ export function PlaylistDialog({ checkResult, onDownloadAll, onDownloadSingle, o
   return (
     <div className="modal-overlay">
       <div className="glass-panel modal-content">
-        <h2>Playlist Detected</h2>
+        <h2>Mixed URL Detected</h2>
         <p className="mt-4 text-secondary">
-          The URL you provided is a playlist: <strong style={{color: 'white'}}>{checkResult.title || 'Unknown Playlist'}</strong>
+          The URL you provided contains both a specific video and a playlist: <strong style={{color: 'white'}}>{checkResult.title || 'Unknown Playlist'}</strong>
           <br/><br/>
-          It contains {checkResult.entries.length} videos.
+          It contains {checkResult.entries.length} videos. What would you like to download?
         </p>
         <div className="flex gap-4 mt-4">
           <button className="btn-primary" onClick={onDownloadAll}>

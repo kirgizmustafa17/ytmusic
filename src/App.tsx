@@ -51,10 +51,19 @@ function App() {
 
   const handleDownload = async (url: string) => {
     try {
+      const isMixed = url.includes('v=') && url.includes('list=');
       const result: CheckResult = await invoke("check_url", { url });
+      
       if (result.is_playlist) {
-        setPlaylistCheck(result);
-        setCurrentUrl(url);
+        if (!isMixed) {
+          // Pure playlist, skip dialog
+          const folder = result.title || "Playlist";
+          startSingleDownload(url, result.title || url, folder);
+        } else {
+          // Mixed URL, let user choose
+          setPlaylistCheck(result);
+          setCurrentUrl(url);
+        }
       } else {
         startSingleDownload(url, result.title || url);
       }
