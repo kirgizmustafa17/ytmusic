@@ -1,7 +1,8 @@
 use tauri::{AppHandle, Emitter};
 use std::process::Stdio;
 use tokio::process::Command;
-use tokio::io::{AsyncBufReadExt, BufReader};
+use tokio::io::{AsyncBufReadExt, BufReader, AsyncWriteExt};
+use tokio::fs::OpenOptions;
 use std::path::PathBuf;
 
 
@@ -134,57 +135,95 @@ pub async fn start_download(
        .arg("-o")
        .arg(&output_template)
        .arg(&url)
+       .stdin(Stdio::null())
        .stdout(Stdio::piped())
        .stderr(Stdio::piped());
 
     let mut child = cmd.spawn().map_err(|e| e.to_string())?;
     
     let stdout = child.stdout.take().ok_or("Failed to capture stdout")?;
-    let mut reader = BufReader::new(stdout).lines();
+    let stderr = child.stderr.take().ok_or("Failed to capture stderr")?;
+    
+    let mut stdout_reader = BufReader::new(stdout).lines();
+    let mut stderr_reader = BufReader::new(stderr).lines();
 
     let id_clone = download_id.clone();
     let app_clone = app.clone();
+    let log_path = get_binary_dir(&app).join("ytmusic_downloads.log");
 
     tokio::spawn(async move {
+        // Emit starting status immediately
+        app_clone.emit("download-progress", DownloadProgress {
+            id: id_clone.clone(),
+            status: "checking".to_string(),
+            percentage: 0.0,
+            speed: "".to_string(),
+            eta: "".to_string(),
+            playlist_index: None,
+            playlist_count: None,
+        }).unwrap_or(());
+
+        let mut log_file = OpenOptions::new().create(true).append(true).open(&log_path).await.ok();
+        
         let mut current_item: Option<u32> = None;
         let mut total_items: Option<u32> = None;
 
-        while let Ok(Some(line)) = reader.next_line().await {
-            if line.starts_with("[download] Downloading item ") || line.starts_with("[download] Downloading video ") {
-                let parts: Vec<&str> = line.split_whitespace().collect();
-                // [download] Downloading video 1 of 3
-                if parts.len() >= 6 {
-                    current_item = parts[3].parse().ok().or(current_item);
-                    total_items = parts[5].parse().ok().or(total_items);
+        loop {
+            tokio::select! {
+                line = stdout_reader.next_line() => {
+                    match line {
+                        Ok(Some(line)) => {
+                            if let Some(file) = log_file.as_mut() {
+                                let _ = file.write_all(format!("STDOUT: {}\n", line).as_bytes()).await;
+                            }
+                            if line.starts_with("[download] Downloading item ") || line.starts_with("[download] Downloading video ") {
+                                let parts: Vec<&str> = line.split_whitespace().collect();
+                                if parts.len() >= 6 {
+                                    current_item = parts[3].parse().ok().or(current_item);
+                                    total_items = parts[5].parse().ok().or(total_items);
+                                }
+                            } else if let Ok(progress) = serde_json::from_str::<serde_json::Value>(&line) {
+                                if let Some(percent_str) = progress.get("_percent_str").and_then(|v| v.as_str()) {
+                                    let cleaned = percent_str.replace("%", "").trim().to_string();
+                                    let percentage: f64 = cleaned.parse().unwrap_or(0.0);
+                                    let speed = progress.get("_speed_str").and_then(|v| v.as_str()).unwrap_or("~").trim().to_string();
+                                    let eta = progress.get("_eta_str").and_then(|v| v.as_str()).unwrap_or("~").trim().to_string();
+                
+                                    app_clone.emit("download-progress", DownloadProgress {
+                                        id: id_clone.clone(),
+                                        status: "downloading".to_string(),
+                                        percentage,
+                                        speed,
+                                        eta,
+                                        playlist_index: current_item,
+                                        playlist_count: total_items,
+                                    }).unwrap_or(());
+                                }
+                            } else if line.contains("[ExtractAudio]") || line.contains("[Merger]") {
+                                app_clone.emit("download-progress", DownloadProgress {
+                                    id: id_clone.clone(),
+                                    status: "converting".to_string(),
+                                    percentage: 100.0,
+                                    speed: "".to_string(),
+                                    eta: "".to_string(),
+                                    playlist_index: current_item,
+                                    playlist_count: total_items,
+                                }).unwrap_or(());
+                            }
+                        }
+                        Ok(None) | Err(_) => break, // EOF or error
+                    }
                 }
-            } else if let Ok(progress) = serde_json::from_str::<serde_json::Value>(&line) {
-                if let Some(percent_str) = progress.get("_percent_str").and_then(|v| v.as_str()) {
-                    let cleaned = percent_str.replace("%", "").trim().to_string();
-                    let percentage: f64 = cleaned.parse().unwrap_or(0.0);
-                    
-                    let speed = progress.get("_speed_str").and_then(|v| v.as_str()).unwrap_or("~").trim().to_string();
-                    let eta = progress.get("_eta_str").and_then(|v| v.as_str()).unwrap_or("~").trim().to_string();
-
-                    app_clone.emit("download-progress", DownloadProgress {
-                        id: id_clone.clone(),
-                        status: "downloading".to_string(),
-                        percentage,
-                        speed,
-                        eta,
-                        playlist_index: current_item,
-                        playlist_count: total_items,
-                    }).unwrap_or(());
+                line = stderr_reader.next_line() => {
+                    match line {
+                        Ok(Some(line)) => {
+                            if let Some(file) = log_file.as_mut() {
+                                let _ = file.write_all(format!("STDERR: {}\n", line).as_bytes()).await;
+                            }
+                        }
+                        Ok(None) | Err(_) => {}, // Will eventually break when stdout finishes, or handle properly
+                    }
                 }
-            } else if line.contains("[ExtractAudio]") || line.contains("[Merger]") {
-                app_clone.emit("download-progress", DownloadProgress {
-                    id: id_clone.clone(),
-                    status: "converting".to_string(),
-                    percentage: 100.0,
-                    speed: "".to_string(),
-                    eta: "".to_string(),
-                    playlist_index: current_item,
-                    playlist_count: total_items,
-                }).unwrap_or(());
             }
         }
         

@@ -17,7 +17,7 @@ export function DownloadItemComponent({ item }: { item: DownloadItem }) {
               {item.playlist_index}/{item.playlist_count}
             </span>
           )}
-          {item.status === 'downloading' || item.status === 'converting' ? <FaSpinner className="fa-spin" /> : null}
+          {(item.status === 'downloading' || item.status === 'converting' || item.status === 'checking') ? <FaSpinner className="fa-spin" /> : null}
           {isComplete && <FaCheck style={{ color: 'var(--success-color)' }} />}
           {isError && <FaExclamationTriangle style={{ color: 'var(--error-color)' }} />}
           {item.status === 'cancelled' && <FaTimes />}
