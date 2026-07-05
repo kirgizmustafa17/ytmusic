@@ -8,6 +8,7 @@ import TitleBar from "./components/TitleBar";
 import { PlaylistDialog } from "./components/PlaylistDialog";
 import { DownloadItem, CheckResult, DownloadProgress } from "./types";
 import { FaMusic } from "react-icons/fa";
+import { useI18n } from "./i18n/I18nContext";
 import "./App.css";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
   const [downloads, setDownloads] = useState<DownloadItem[]>([]);
   const [playlistCheck, setPlaylistCheck] = useState<CheckResult | null>(null);
   const [currentUrl, setCurrentUrl] = useState<string | null>(null);
+  const { t } = useI18n();
 
   const downloadsRef = useRef(downloads);
   useEffect(() => {
@@ -68,7 +70,7 @@ function App() {
         startSingleDownload(url, result.title || url);
       }
     } catch (e: any) {
-      alert(`Failed to check URL: ${e}`);
+      alert(t('app.alert.failed_check', { error: String(e) }));
     }
   };
 
@@ -128,7 +130,7 @@ function App() {
         <h1 className="flex items-center justify-center gap-4">
           <FaMusic /> YTMusic
         </h1>
-        <p className="text-secondary mt-2">Premium YouTube Audio Downloader</p>
+        <p className="text-secondary mt-2">{t('app.subtitle')}</p>
       </header>
 
       <UrlInput onDownload={handleDownload} />

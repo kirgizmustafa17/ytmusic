@@ -1,8 +1,10 @@
 import { VscChromeMinimize, VscChromeMaximize, VscChromeClose } from "react-icons/vsc";
 import { getCurrentWindow } from '@tauri-apps/api/window';
+import { useI18n } from '../i18n/I18nContext';
 
 export default function TitleBar() {
   const appWindow = getCurrentWindow();
+  const { language, setLanguage } = useI18n();
 
   return (
     <div className="titlebar">
@@ -10,6 +12,13 @@ export default function TitleBar() {
         YTMusic Downloader
       </div>
       <div className="titlebar-buttons">
+        <div 
+          className="titlebar-button" 
+          style={{ width: 'auto', padding: '0 10px', fontSize: '12px', fontWeight: 'bold' }}
+          onClick={() => setLanguage(language === 'en' ? 'tr' : 'en')}
+        >
+          {language.toUpperCase()}
+        </div>
         <div className="titlebar-button" onClick={() => appWindow.minimize()}>
           <VscChromeMinimize />
         </div>

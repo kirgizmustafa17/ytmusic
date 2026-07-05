@@ -1,9 +1,14 @@
 import { DownloadItem } from '../types';
 import { FaCheck, FaSpinner, FaTimes, FaExclamationTriangle } from 'react-icons/fa';
+import { useI18n } from '../i18n/I18nContext';
+import { TranslationKey } from '../i18n/index';
 
 export function DownloadItemComponent({ item }: { item: DownloadItem }) {
+  const { t } = useI18n();
   const isComplete = item.status === 'completed';
   const isError = item.status === 'error';
+  
+  const statusKey = `status.${item.status}` as TranslationKey;
   
   return (
     <div className="download-item">
@@ -21,8 +26,8 @@ export function DownloadItemComponent({ item }: { item: DownloadItem }) {
           {isComplete && <FaCheck style={{ color: 'var(--success-color)' }} />}
           {isError && <FaExclamationTriangle style={{ color: 'var(--error-color)' }} />}
           {item.status === 'cancelled' && <FaTimes />}
-          <span className="text-sm" style={{ textTransform: 'capitalize' }}>
-            {item.status}
+          <span className="text-sm">
+            {t(statusKey)}
           </span>
         </div>
       </div>
@@ -37,7 +42,7 @@ export function DownloadItemComponent({ item }: { item: DownloadItem }) {
           </div>
           <div className="download-meta mt-2">
             <span>{item.speed || '--'}</span>
-            <span>{item.eta ? `ETA: ${item.eta}` : ''}</span>
+            <span>{item.eta ? t('item.eta', { eta: item.eta }) : ''}</span>
           </div>
         </>
       )}

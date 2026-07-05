@@ -1,4 +1,5 @@
 import { CheckResult } from '../types';
+import { useI18n } from '../i18n/I18nContext';
 
 interface PlaylistDialogProps {
   checkResult: CheckResult;
@@ -8,24 +9,26 @@ interface PlaylistDialogProps {
 }
 
 export function PlaylistDialog({ checkResult, onDownloadAll, onDownloadSingle, onCancel }: PlaylistDialogProps) {
+  const { t } = useI18n();
+
   return (
     <div className="modal-overlay">
       <div className="glass-panel modal-content">
-        <h2>Mixed URL Detected</h2>
+        <h2>{t('dialog.title')}</h2>
         <p className="mt-4 text-secondary">
-          The URL you provided contains both a specific video and a playlist: <strong style={{color: 'white'}}>{checkResult.title || 'Unknown Playlist'}</strong>
+          {t('dialog.desc_part1')} <strong style={{color: 'white'}}>{checkResult.title || t('dialog.unknown_playlist')}</strong>
           <br/><br/>
-          It contains {checkResult.entries.length} videos. What would you like to download?
+          {t('dialog.desc_part2', { count: checkResult.entries.length })}
         </p>
         <div className="flex gap-4 mt-4">
           <button className="btn-primary" onClick={onDownloadAll}>
-            Download Entire Playlist
+            {t('dialog.btn.all')}
           </button>
           <button className="btn-secondary" onClick={onDownloadSingle}>
-            Just This Video
+            {t('dialog.btn.single')}
           </button>
           <button className="btn-secondary" onClick={onCancel} style={{ marginLeft: 'auto', background: 'rgba(239,68,68,0.2)' }}>
-            Cancel
+            {t('dialog.btn.cancel')}
           </button>
         </div>
       </div>

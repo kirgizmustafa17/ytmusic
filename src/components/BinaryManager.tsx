@@ -3,6 +3,7 @@ import { invoke } from '@tauri-apps/api/core';
 import { listen, UnlistenFn } from '@tauri-apps/api/event';
 import { BinaryStatus } from '../types';
 import { FaCheckCircle, FaTimesCircle, FaDownload, FaSpinner } from 'react-icons/fa';
+import { useI18n } from '../i18n/I18nContext';
 
 interface BinaryManagerProps {
   onComplete: () => void;
@@ -18,6 +19,7 @@ export function BinaryManager({ onComplete }: BinaryManagerProps) {
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [downloading, setDownloading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useI18n();
 
   const checkBinaries = async () => {
     try {
@@ -71,9 +73,9 @@ export function BinaryManager({ onComplete }: BinaryManagerProps) {
 
   return (
     <div className="glass-panel" style={{ maxWidth: '600px', margin: '10vh auto' }}>
-      <h2 className="text-center">Initial Setup</h2>
+      <h2 className="text-center">{t('binary.title')}</h2>
       <p className="text-secondary text-center mt-2 mb-4">
-        Downloading required dependencies (yt-dlp, ffmpeg, deno)...
+        {t('binary.desc')}
       </p>
       
       <div className="flex flex-col gap-4 mt-4">
@@ -110,7 +112,7 @@ export function BinaryManager({ onComplete }: BinaryManagerProps) {
             disabled={downloading}
           >
             {downloading ? <FaSpinner className="fa-spin" /> : <FaDownload />}
-            {downloading ? 'Downloading...' : 'Download Missing Binaries'}
+            {downloading ? t('binary.btn.downloading') : t('binary.btn.download')}
           </button>
         )}
       </div>
